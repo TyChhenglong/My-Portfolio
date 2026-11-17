@@ -1262,6 +1262,10 @@ body {
     color: #22c55e;
 }
 
+/* telegram */
+.contact-card:hover .fa-telegram {
+    color: #23b6ff;
+}
 /* Location Hover */
 .contact-card:hover .fa-location-dot {
     color: #f2f1f5;
