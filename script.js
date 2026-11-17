@@ -1,39 +1,55 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // =========================
+    // =====================================
     // MOBILE NAVIGATION
-    // =========================
+    // =====================================
 
     const menuBtn = document.getElementById("menuBtn");
     const nav = document.getElementById("nav");
 
-    // Check if navbar elements exist
     if (menuBtn && nav) {
 
-        // Toggle mobile menu
-        menuBtn.addEventListener("click", () => {
+        function closeMenu() {
+            nav.classList.remove("active");
 
-            const isOpen = nav.classList.toggle("active");
+            menuBtn.setAttribute("aria-expanded", "false");
+            menuBtn.setAttribute("aria-label", "Open navigation");
 
-            menuBtn.setAttribute("aria-expanded", isOpen);
+            menuBtn.innerHTML =
+                '<i class="fa-solid fa-bars"></i>';
+        }
 
-            menuBtn.innerHTML = isOpen
-                ? '<i class="fa-solid fa-xmark"></i>'
-                : '<i class="fa-solid fa-bars"></i>';
+        function openMenu() {
+            nav.classList.add("active");
+
+            menuBtn.setAttribute("aria-expanded", "true");
+            menuBtn.setAttribute("aria-label", "Close navigation");
+
+            menuBtn.innerHTML =
+                '<i class="fa-solid fa-xmark"></i>';
+        }
+
+        // Toggle menu
+        menuBtn.addEventListener("click", (event) => {
+
+            event.stopPropagation();
+
+            const isOpen = nav.classList.contains("active");
+
+            if (isOpen) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+
         });
 
-        // Close menu after clicking navigation links
+        // Close menu when clicking a navigation link
         nav.querySelectorAll("a").forEach(link => {
 
             link.addEventListener("click", () => {
-
-                nav.classList.remove("active");
-
-                menuBtn.setAttribute("aria-expanded", "false");
-
-                menuBtn.innerHTML =
-                    '<i class="fa-solid fa-bars"></i>';
+                closeMenu();
             });
 
         });
@@ -45,28 +61,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 !nav.contains(event.target) &&
                 !menuBtn.contains(event.target)
             ) {
-
-                nav.classList.remove("active");
-
-                menuBtn.setAttribute("aria-expanded", "false");
-
-                menuBtn.innerHTML =
-                    '<i class="fa-solid fa-bars"></i>';
+                closeMenu();
             }
 
         });
 
-        // Close menu when resizing to desktop
+        // Close menu when pressing Escape
+        document.addEventListener("keydown", (event) => {
+
+            if (event.key === "Escape") {
+                closeMenu();
+            }
+
+        });
+
+        // Reset menu when returning to desktop
         window.addEventListener("resize", () => {
 
             if (window.innerWidth > 768) {
-
-                nav.classList.remove("active");
-
-                menuBtn.setAttribute("aria-expanded", "false");
-
-                menuBtn.innerHTML =
-                    '<i class="fa-solid fa-bars"></i>';
+                closeMenu();
             }
 
         });
@@ -74,9 +87,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // =========================
+    // =====================================
     // ACTIVE NAVIGATION ON SCROLL
-    // =========================
+    // =====================================
 
     const sections = document.querySelectorAll(
         "#home, #about, #skills, #projects, #contact"
@@ -104,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-        // Update navbar active links
+        // Update navbar links
         navLinks.forEach(link => {
 
             link.classList.toggle(
@@ -127,21 +140,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     window.addEventListener("scroll", updateActiveSection);
+    window.addEventListener("load", updateActiveSection);
 
-    // Initial active section
     updateActiveSection();
 
 
-    // =========================
+    // =====================================
     // CURRENT YEAR
-    // =========================
+    // =====================================
 
     const yearElement = document.getElementById("year");
 
     if (yearElement) {
-
         yearElement.textContent = new Date().getFullYear();
-
     }
 
 });
